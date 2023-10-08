@@ -1,10 +1,10 @@
 import { createContext, ReactNode, useState  } from 'react'
-//import { ProductProps } from '../pages/home'
+import { ProductProps } from '../../pages/home/Home';
 
 interface CartContextData {
   cart: CartProps[];
   cartAmount: number;
-  //addItemCart: (newItem: ProductProps) => void;
+  addItemCart: (newItem: ProductProps) => void;
   removeItemCart: (product: CartProps) => void;
   total: string;
 }
@@ -29,7 +29,7 @@ function ContextProvider({ children }: CartProviderProps){
   const [cart, setCart] = useState<CartProps[]>([])
   const [total, setTotal] = useState("");
 
-  /* function addItemCart(newItem: ProductProps){
+  function addItemCart(newItem: ProductProps){
     const indexItem = cart.findIndex(item => item.id === newItem.id)
 
     if(indexItem !== -1){
@@ -54,7 +54,7 @@ function ContextProvider({ children }: CartProviderProps){
     setCart(products => [...products, data])
     totalResultCart([...cart, data])
 
-  } */
+  }
 
 
   function removeItemCart(product: CartProps){
@@ -91,7 +91,7 @@ function ContextProvider({ children }: CartProviderProps){
       value={{ 
         cart,
         cartAmount: cart.length,
-        //addItemCart,
+        addItemCart,
         removeItemCart,
         total
        }}
