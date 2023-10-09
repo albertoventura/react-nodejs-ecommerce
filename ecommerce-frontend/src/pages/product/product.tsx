@@ -2,7 +2,7 @@
 import { useState, useEffect, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { productsDB } from "../../core/services/api";
-import { ProductProps } from '../home/Home';
+import { IProduct } from '../../core/interfaces/Product.interface';
 import { BsCartPlus } from 'react-icons/bs'
 //import toast from 'react-hot-toast'
 
@@ -14,15 +14,19 @@ import { Link } from 'react-router-dom'
 
 export default function ProductDetail(){
   const { id } = useParams();
-  const [product, setProduct] = useState<ProductProps>()
+  const [product, setProduct] = useState<IProduct>()
   const { addItemCart } = useContext(Context);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function getProduct(){
       //const response = await api.get(`/products/${id}`)
-      const response = productsDB.map(product => {
-        setProduct(product);
+      const response = productsDB.map(product => {        
+        
+        if(product.id == Number(id)) {
+          setProduct(product);
+        }
+        
       });
       
       //setProduct(response);
@@ -32,7 +36,7 @@ export default function ProductDetail(){
   }, [id])
 
 
-  function handleAddItem(product: ProductProps){
+  function handleAddItem(product: IProduct){
     /* toast.success("Produto adicionado no carrinho.", {
       style:{
         borderRadius: 10,
@@ -58,7 +62,7 @@ export default function ProductDetail(){
                 alt={product?.title}
               />
 
-              <div className="flex-1">
+              <div className="flex-1 ml-5">
                 <p className="font-bold text-2xl mt-4 mb-2">{product?.title}</p>
                 <p className="my-4">{product?.description}</p>
                 <strong className="text-zinc-700/90 text-xl">
