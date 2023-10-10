@@ -1,11 +1,13 @@
 import { useEffect, useState, useContext } from 'react'
 import { BsCartPlus, BsPlusCircle } from 'react-icons/bs'
 
-import { productsDB } from "../../core/services/api";
+import { productsDB } from "../../core/services/ApiConfig";
 import { Context } from "../../core/context/context";
 //import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
-
+import { ProductService } from '../product/services/ProductService';
+import { IProduct } from '../../core/interfaces/Product.interface';
+import { ApiException } from '../../core/services/ApiException';
 export interface ProductProps{
   id: number;
   title: string;
@@ -16,16 +18,20 @@ export interface ProductProps{
 
 export default function Home(){
   const { addItemCart } = useContext(Context)
-  const [products, setProducts] = useState<ProductProps[]>([])
+  const [products, setProducts] = useState<IProduct[]>([])
 
   useEffect(() => {
     async function getProducts(){
       //const response = await api.get("/products")
-      const response = productsDB;
+      
+      const response: IProduct[] | ApiException = await ProductService.getAll();
+      //const response = productsDB;
+
       console.log("@", response);
       
-      setProducts(response)
-      console.log("@@", products);
+      setProducts(response);
+      
+      //console.log("@@", products);
       
     }
 
@@ -33,6 +39,7 @@ export default function Home(){
   }, [])
 
   function handleAddCartItem(product: ProductProps){
+    console.log("@", products);
     addItemCart(product);
   }
 
@@ -51,8 +58,8 @@ export default function Home(){
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5">
           {products.map( (product) => (
-            <section key={product.id} className="w-full">
-                <Link to={`/product/${product.id}`}>
+            <section key={product._id} className="w-full">
+                <Link to={`/product/${product._id}`}>
                     <img
                         className="w-full rounded-lg max-h-70 mb-2"
                         src={product.cover}
@@ -63,7 +70,7 @@ export default function Home(){
   
                 <div className="flex gap-3 items-center">
                     <strong className="text-zinc-700/90">
-                        {product.price.toLocaleString("pt-BR", {
+                        {product?.price?.toLocaleString("pt-BR", {
                         style: "currency",
                         currency: "BRL"
                         })}

@@ -1,10 +1,12 @@
 
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import formConfig from "../../../core/constants/Config";
 import { IProduct } from "../../../core/interfaces/Product.interface"
 import { FormEvent,  useState, useRef, useMemo, useCallback} from "react";
+import { ProductService } from "../services/ProductService";
 
 export default function ProductEdit(){
+    const navigate = useNavigate();
     const {state} = useLocation();
     console.log("daaaaaaaaaaaaaaaaa", state);
 
@@ -21,7 +23,7 @@ export default function ProductEdit(){
         return (isValidTitle && isValidPrice);
     }
 
-    function handleChange({name, value}: HTMLInputElement){
+    function handleChange({name, value}: HTMLInputElement | HTMLTextAreaElement){
         //console.log(name, value);
         setProduct({...product, [name]: value});
         //console.log(product);  
@@ -53,13 +55,32 @@ export default function ProductEdit(){
         return;
     }
 
-    function handleSubmit(e: FormEvent){
+    async function handleSubmit(e: FormEvent){
         e.preventDefault();
         console.log('product', product);  
         validateTitle();
         validatePrice();
+        
+        if(validateForm()){
+            let response: IProduct | ApiException;
+            if(product._id){
+                response = await ProductService.update(product);
+            }else{
+                response = await ProductService.create(product);
+            }
+            navigate(`/product/${response._id}`);
+        }
     }
-
+    async function handleDelete(id: string){
+        console.log(id);
+        
+        await ProductService.del(id).then(()=>{
+            navigate('/');
+        }).catch(e => {
+            console.log("error on delete", e);            
+        });
+        
+    }
     function handleImageChange(event) {
         const selectedFile = event.target.files[0];
         //image/png, image/jpeg, image/jpg
@@ -86,7 +107,7 @@ export default function ProductEdit(){
             }
             
         }
-      }
+    }
 
     return (
         <main className="w-full max-w-7xl px-4 mx-auto">
@@ -208,16 +229,24 @@ export default function ProductEdit(){
                 </div>
 
                 <div className="mt-6 flex items-center justify-center gap-x-6">
-                    { product?.id && (<button type="button" className="rounded-md bg-red-600 px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900">
-                        Delete
-                    </button>)}
+                    { product?._id && 
+                        (
+                            <button 
+                                type="button" 
+                                className="rounded-md bg-red-600 px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900"
+                                onClick={() => handleDelete(product._id!)}
+                            >
+                                Delete
+                            </button>
+                        )
+                    }
                     <button
                         type="submit"
                         className={" rounded-md bg-green-600 px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-900"}
                         
                     >
                         {/* if id inexistente, colocar o texto como create */}
-                        { product?.id ? "Update" : "Create"}
+                        { product?._id ? "Update" : "Create"}
                     </button>
                 </div>
             </form>

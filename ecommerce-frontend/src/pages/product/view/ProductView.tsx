@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { productsDB } from "../../../core/services/api";
+import { productsDB } from "../../../core/services/ApiConfig";
 import { IProduct } from '../../../core/interfaces/Product.interface';
 import { BsCartPlus } from 'react-icons/bs'
 //import toast from 'react-hot-toast'
@@ -11,6 +11,8 @@ import { BsCartPlus } from 'react-icons/bs'
 import { Context } from "../../../core/context/context";
 //import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
+import { ProductService } from '../services/ProductService';
+import { ApiException } from '../../../core/services/ApiException';
 
 export default function ProductView(){
   const { id } = useParams();
@@ -20,19 +22,22 @@ export default function ProductView(){
 
   useEffect(() => {
     async function getProduct(){
-      //const response = await api.get(`/products/${id}`)
-      const response = productsDB.map(product => {        
-        
-        if(product.id == Number(id)) {
-          setProduct(product);
-        }
-        
-      });
-      
-      //setProduct(response);
+        //const response = await api.get(`/products/${id}`)
+        const response: IProduct | ApiException = await ProductService.getById(id!);  
+        /* const response = productsDB.map(product => {        
+          if(product.id == Number(id)) {
+            setProduct(product);
+          }
+          
+        }); */
+
+        console.log("@", response);
+        setProduct(response);
     }
 
     getProduct();
+
+    
   }, [id])
 
   function handleEditProduct(){
@@ -70,7 +75,7 @@ export default function ProductView(){
                 <p className="font-bold text-2xl mt-4 mb-2">{product?.title}</p>
                 <p className="my-4">{product?.description}</p>
                 <strong className="text-zinc-700/90 text-xl">
-                  {product.price.toLocaleString("pt-BR", {
+                  {product?.price?.toLocaleString("pt-BR", {
                     style: "currency",
                     currency: "BRL"
                   })}

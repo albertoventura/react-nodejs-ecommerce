@@ -1,4 +1,7 @@
 import axios from "axios";
+const host: string = "localhost";
+const port: number = 3001;
+const baseURL = `http://${host}:${port}`;
 
 export const productsDB = [
       { 
@@ -51,7 +54,9 @@ export const productsDB = [
       }
     ];
 
-/* export const api = axios.create({
-    data: products,
-}) */
+export const Api = () => {
+  return axios.create({
+      baseURL
+  });
+}
 

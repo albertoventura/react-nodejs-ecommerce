@@ -87,7 +87,7 @@ const productService = {
                             return { 
                                 status: 200,
                                 message: "Product successfully updated",
-                                market: doc,
+                                product: doc,
                             };
                         })
                         .catch( err => {
