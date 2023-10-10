@@ -1,4 +1,5 @@
 
+import { useLocation } from "react-router-dom";
 import formConfig from "../../../core/constants/Config";
 import { IProduct } from "../../../core/interfaces/Product.interface"
 import { FormEvent,  useState, useRef, useMemo, useCallback} from "react";
@@ -8,6 +9,9 @@ export default function ProductEdit(){
     const [isValidTitle, setIsValidTitle] = useState<boolean>(false);
     const [isValidPrice, setIsValidPrice] = useState<boolean>(false);
     const [isValidCover, setIsValidCover] = useState<boolean>(false);
+
+    const {state} = useLocation();
+    console.log("daaaaaaaaaaaaaaaaa", state);
 
     function validateForm(){
         console.log("valid title?", isValidTitle);
@@ -219,8 +223,8 @@ export default function ProductEdit(){
                     </button>
                     <button
                         type="submit"
-                        className={/* (!validateForm() ? 'cursor-not-allowed opacity-50': '') + */" rounded-md bg-indigo-600 px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}
-                        /* disabled={!validateForm()} */
+                        className={" rounded-md bg-indigo-600 px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}
+                        
                     >
                         {/* if id inexistente, colocar o texto como create */}
                         Save 
