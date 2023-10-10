@@ -5,13 +5,15 @@ import { IProduct } from "../../../core/interfaces/Product.interface"
 import { FormEvent,  useState, useRef, useMemo, useCallback} from "react";
 
 export default function ProductEdit(){
-    const [product, setProduct] = useState<IProduct>();
-    const [isValidTitle, setIsValidTitle] = useState<boolean>(false);
-    const [isValidPrice, setIsValidPrice] = useState<boolean>(false);
-    const [isValidCover, setIsValidCover] = useState<boolean>(false);
-
     const {state} = useLocation();
     console.log("daaaaaaaaaaaaaaaaa", state);
+
+    const [product, setProduct] = useState<IProduct>(state);
+    const [isValidTitle, setIsValidTitle] = useState<boolean>(true);
+    const [isValidPrice, setIsValidPrice] = useState<boolean>(true);
+    const [isValidCover, setIsValidCover] = useState<boolean>(true);
+
+    
 
     function validateForm(){
         console.log("valid title?", isValidTitle);
@@ -29,47 +31,31 @@ export default function ProductEdit(){
 
     function validateTitle(){
         const title = product?.title || "";
-
-        console.log("product", product);  
-        console.log("title value", title);
-        console.log("is valid title?", isValidTitle);
         
         if(title.length  <= formConfig.titleMinLength) {
-            console.log("found error title");
             
             setIsValidTitle(false);
             return;
         }
-        if(!isValidTitle){
-            setIsValidTitle(true);
-        }
-        console.log("/////////////");
-        
+
+        setIsValidTitle(true);        
         return;
     }
     function validatePrice(){
         const price = product?.price || -1;
-        console.log("product", product);  
-        console.log("price value", price);
-        console.log("is valid price?", isValidPrice);
         
         if(price < formConfig.priceMinValue ) {
-            console.log("found error price");
             setIsValidPrice(false)
-            console.log("price", price);
             return;
         }
-
-        if(!isValidPrice){
-            setIsValidPrice(true);
-        }
-        console.log("%%%%%%%%%%");
+        
+        setIsValidPrice(true);
         return;
     }
 
     function handleSubmit(e: FormEvent){
         e.preventDefault();
-        console.log(product);  
+        console.log('product', product);  
         validateTitle();
         validatePrice();
     }
@@ -121,6 +107,7 @@ export default function ProductEdit(){
                                         type="text"
                                         name="title"
                                         id="title"
+                                        value={product?.title}
                                         className={(!isValidTitle ? " border-red-500 border " : '')+"pl-3 block flex-1 rounded-md bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"}
                                         placeholder="Dell Notebook Inspiron 15r"
                                         onChange={(e) => handleChange(e.target)}
@@ -143,8 +130,9 @@ export default function ProductEdit(){
                                 id="description"
                                 name="description"
                                 rows={3}
+                                value={product?.description}
                                 className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                defaultValue={''}
+                                /* defaultValue={''} */
                                 onChange={(e) => handleChange(e.target)}
                             />
                         </div>
@@ -161,7 +149,9 @@ export default function ProductEdit(){
                                     type="number" 
                                     id="price"
                                     name="price" 
+                                    step="0.01"
                                     min="0"
+                                    value={product?.price}
                                     className={(!isValidPrice ? " border-red-500 border" : '')+ " rounded-md px-3 bg-grey-lighter text-grey-darker py-1.5 font-normal text-grey-darkest border border-grey-lighter font-bold"}
                                     onChange={(e) => handleChange(e.target)}
                                 />
@@ -218,16 +208,16 @@ export default function ProductEdit(){
                 </div>
 
                 <div className="mt-6 flex items-center justify-center gap-x-6">
-                    <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+                    { product?.id && (<button type="button" className="rounded-md bg-red-600 px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900">
                         Delete
-                    </button>
+                    </button>)}
                     <button
                         type="submit"
-                        className={" rounded-md bg-indigo-600 px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}
+                        className={" rounded-md bg-green-600 px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-900"}
                         
                     >
                         {/* if id inexistente, colocar o texto como create */}
-                        Save 
+                        { product?.id ? "Update" : "Create"}
                     </button>
                 </div>
             </form>

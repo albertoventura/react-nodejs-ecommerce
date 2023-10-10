@@ -1,14 +1,14 @@
 import ContextProvider from "./core/context/context";
 import { RouterProvider } from "react-router-dom";
-import { router } from "./core/routes/routes";
-import Routess from "./core/routes/routess";
+import { router } from "./core/routes/routesss";
+import Routers from "./core/routes/routes";
 function App() {
 
 
   return (
     <ContextProvider>
       {/* <RouterProvider router={router} /> */}
-      <Routess />
+      <Routers />
     </ContextProvider>
   )
 }
