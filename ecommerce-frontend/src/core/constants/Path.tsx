@@ -1,10 +1,14 @@
+const product = {
+    product: "/product",
+    edit: "edit",
+    view: ":id"
+
+}
+
 const Paths = {
     home: "/",
-    cart: "/",
-    product: "/",
-    login: "/",
-    signUp: "/",
-    user: "/",
+    cart: "/cart",
+    ...product
 }
 
 export default Paths;

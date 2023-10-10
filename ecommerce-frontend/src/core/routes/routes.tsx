@@ -1,30 +1,29 @@
 
 import { BrowserRouter } from "react-router-dom";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import Layout from "../components/layout/Layout";
+import { Route, Routes } from "react-router-dom";
 import Home from "../../pages/home/Home";
 import ProductView from "../../pages/product/view/ProductView";
 import ProductEdit from "../../pages/product/edit/ProductEdit";
 import Cart from "../../pages/cart/Cart";
-import Sign from "../../pages/sign/Sign";
 import Product from "../../pages/product/Product";
 import Header from "../components/header/Header";
+import Paths from "../constants/Path";
+import ErrorPage from "../../pages/error/ErrorPage";
 
 export default function Routers(){
     return (
         <BrowserRouter>
             <Header></Header>
-            <div style={{marginTop: "30px"}}>
+            <div className="mt-10">
                 <Routes>
-                    <Route exact path={"/"} element={ <Home />}/>
-                    <Route exact path={"/cart"} element={ <Cart />}/>
-                    <Route path={"/product"} element={ <Product />}>
-                        <Route index path={":id"} element={ <ProductView/> }></Route>
-                        <Route path={"edit"} element={<ProductEdit/>}/>
+                    <Route path={Paths.home} element={ <Home />}/>
+                    <Route path={Paths.cart} element={ <Cart />}/>
+                    <Route path={Paths.product} element={ <Product />}>
+                        <Route index path={Paths.view} element={ <ProductView/> }></Route>
+                        <Route path={Paths.edit} element={<ProductEdit/>}/>
                     </Route>
-
+                    <Route path={"*"} element={<ErrorPage/>}></Route>
                 </Routes>
-
             </div>
         </BrowserRouter>        
     );
