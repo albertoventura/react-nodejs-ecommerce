@@ -1,13 +1,12 @@
 import { useEffect, useState, useContext } from 'react'
-import { BsCartPlus, BsPlusCircle } from 'react-icons/bs'
-
-import { productsDB } from "../../core/services/ApiConfig";
+import { BsPlusCircle } from 'react-icons/bs'
 import { Context } from "../../core/context/context";
 //import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 import { ProductService } from '../product/services/ProductService';
 import { IProduct } from '../../core/interfaces/Product.interface';
 import { ApiException } from '../../core/services/ApiException';
+import ProductCard from './components/ProductCard';
 export interface ProductProps{
   id: number;
   title: string;
@@ -22,24 +21,14 @@ export default function Home(){
 
   useEffect(() => {
     async function getProducts(){
-      //const response = await api.get("/products")
-      
       const response: IProduct[] | ApiException = await ProductService.getAll();
-      //const response = productsDB;
-
-      console.log("@", response);
-      
       setProducts(response);
-      
-      //console.log("@@", products);
-      
     }
 
     getProducts();
   }, [])
 
   function handleAddCartItem(product: ProductProps){
-    console.log("@", products);
     addItemCart(product);
   }
 
@@ -57,30 +46,8 @@ export default function Home(){
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5">
-          {products.map( (product) => (
-            <section key={product._id} className="w-full">
-                <Link to={`/product/${product._id}`}>
-                    <img
-                        className="w-full rounded-lg max-h-70 mb-2"
-                        src={product.cover}
-                        alt={product.title}
-                    />
-                    <p className="font-medium mt-1 mb-2">{product.title}</p>
-                </Link>
-  
-                <div className="flex gap-3 items-center">
-                    <strong className="text-zinc-700/90">
-                        {product?.price?.toLocaleString("pt-BR", {
-                        style: "currency",
-                        currency: "BRL"
-                        })}
-                    </strong>
-                    <button className="bg-zinc-900 p-1 rounded" onClick={ () => handleAddCartItem(product) }>
-                        <BsCartPlus size={20} color="#FFF"/>
-                    </button>
-                </div>
-  
-            </section>
+          {products.map( (product) => (            
+              <ProductCard product={product} click={() => handleAddCartItem}/>
           ))}
 
         </div>
