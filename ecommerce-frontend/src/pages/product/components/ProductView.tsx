@@ -4,15 +4,10 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { productsDB } from "../../../core/services/ApiConfig";
 import { IProduct } from '../../../core/interfaces/Product.interface';
 import { BsCartPlus } from 'react-icons/bs'
-//import toast from 'react-hot-toast'
-
-
-
 import { Context } from "../../../core/context/context";
-//import toast from 'react-hot-toast'
-import { Link } from 'react-router-dom'
 import { ProductService } from '../services/ProductService';
 import { ApiException } from '../../../core/services/ApiException';
+import { ToastService } from '../../../shared/services/ToastService';
 
 export default function ProductView(){
   const { id } = useParams();
@@ -22,40 +17,19 @@ export default function ProductView(){
 
   useEffect(() => {
     async function getProduct(){
-        //const response = await api.get(`/products/${id}`)
         const response: IProduct | ApiException = await ProductService.getById(id!);  
-        /* const response = productsDB.map(product => {        
-          if(product.id == Number(id)) {
-            setProduct(product);
-          }
-          
-        }); */
-
-        console.log("@", response);
         setProduct(response);
     }
-
     getProduct();
-
-    
-  }, [id])
+  }, [id]);
 
   function handleEditProduct(){
-    console.log(';/;2');
-    
     navigate("/product/edit", {state: product});
   }
   function handleAddItem(product: IProduct){
-    /* toast.success("Produto adicionado no carrinho.", {
-      style:{
-        borderRadius: 10,
-        backgroundColor: "#121212",
-        color: "#FFF"
-      }
-    }) */
-    addItemCart(product)
-
-    navigate("/cart")
+    ToastService.ShowSuccess("Product added to cart.");
+    addItemCart(product);
+    navigate("/cart");
   }
 
 
@@ -87,15 +61,11 @@ export default function ProductView(){
 
             </div>
             <div className="mt-6 flex items-center justify-center gap-x-6">
-                    {/* <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
-                        Delete
-                    </button> */}
                     <button
                         onClick={handleEditProduct}
                         className={" rounded-md bg-indigo-600 px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}
-                        
                     >
-                        Edit
+                      Edit
                     </button>
                 </div>
           </section>
