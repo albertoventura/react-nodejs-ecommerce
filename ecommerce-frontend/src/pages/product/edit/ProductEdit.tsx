@@ -4,11 +4,13 @@ import formConfig from "../../../core/constants/Config";
 import { IProduct } from "../../../core/interfaces/Product.interface"
 import { FormEvent,  useState, useRef, useMemo, useCallback} from "react";
 import { ProductService } from "../services/ProductService";
+//import CurrencyInput from 'react-currency-masked-input'
+import { CurrencyInput } from 'react-currency-mask';
+import RequiredField from "../../../shared/components/form/RequiredField";
 
 export default function ProductEdit(){
     const navigate = useNavigate();
     const {state} = useLocation();
-    console.log("daaaaaaaaaaaaaaaaa", state);
 
     const [product, setProduct] = useState<IProduct>(state);
     const [isValidTitle, setIsValidTitle] = useState<boolean>(true);
@@ -20,21 +22,28 @@ export default function ProductEdit(){
     function validateForm(){
         console.log("valid title?", isValidTitle);
         console.log("valid price?", isValidPrice);
-        return (isValidTitle && isValidPrice);
+        console.log("valid cover?", isValidCover);
+        
+        return ((isValidTitle && isValidPrice && isValidCover));
     }
-
+    function validateObject(){
+        console.log("!!produc?.title", !!product?.title);
+        console.log("!!produc?.price", !!product?.price);
+        console.log("!!produc?.cover", !!product?.cover);
+        
+        return ((!!product?.title && !!product?.price && !!product?.cover));
+    }
     function handleChange({name, value}: HTMLInputElement | HTMLTextAreaElement){
-        //console.log(name, value);
         setProduct({...product, [name]: value});
-        //console.log(product);  
-        //console.log(validateForm());
         
     }
 
     function validateTitle(){
         const title = product?.title || "";
+        console.log('$$$$$$', title);
         
-        if(title.length  <= formConfig.titleMinLength) {
+        if(title.length <= formConfig.titleMinLength) {
+            console.log('$@@@@@$$$$$', title);
             
             setIsValidTitle(false);
             return;
@@ -55,13 +64,25 @@ export default function ProductEdit(){
         return;
     }
 
+    function validateCover(){        
+        
+        if(!product?.cover) {
+            setIsValidCover(false)
+            return;
+        }
+        
+        setIsValidCover(true);
+        return;
+    }
+
     async function handleSubmit(e: FormEvent){
         e.preventDefault();
         console.log('product', product);  
         validateTitle();
         validatePrice();
-        
-        if(validateForm()){
+        validateCover();
+
+        if(validateForm() && validateObject()){
             let response: IProduct | ApiException;
             if(product._id){
                 response = await ProductService.update(product);
@@ -83,7 +104,6 @@ export default function ProductEdit(){
     }
     function handleImageChange(event) {
         const selectedFile = event.target.files[0];
-        //image/png, image/jpeg, image/jpg
         const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
         console.log(selectedFile);
         
@@ -118,20 +138,21 @@ export default function ProductEdit(){
 
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div className="sm:col-span-4">
-                            <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
-                                Product name
+                            <label htmlFor="title" title="Required field" className="block text-sm font-medium leading-6 text-gray-900">
+                                Product name <RequiredField />
                             </label>
                             <div className="mt-2">
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                
+                                    
                                     <input
                                         type="text"
                                         name="title"
                                         id="title"
                                         value={product?.title}
-                                        className={(!isValidTitle ? " border-red-500 border " : '')+"pl-3 block flex-1 rounded-md bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"}
+                                        className={(!isValidTitle ?? ("border-red-500 border "))+"pl-3 block flex-1 rounded-md bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"}
                                         placeholder="Dell Notebook Inspiron 15r"
                                         onChange={(e) => handleChange(e.target)}
+                                        onBlur={() => validateTitle()}
                                     />
                                 </div>
                                 { !isValidTitle ?
@@ -151,9 +172,9 @@ export default function ProductEdit(){
                                 id="description"
                                 name="description"
                                 rows={3}
+                                maxLength={1000}
                                 value={product?.description}
                                 className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                /* defaultValue={''} */
                                 onChange={(e) => handleChange(e.target)}
                             />
                         </div>
@@ -161,20 +182,19 @@ export default function ProductEdit(){
                         </div>
 
                         <div className="flex flex-col col-span-full">
-                            <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">
-                                Price
+                            <label htmlFor="price" title="Required field" className="block text-sm font-medium leading-6 text-gray-900">
+                                Price <RequiredField />
                             </label>
                             <div className="mt-2 flex flex-row">
-                                <span className="flex items-center bg-grey-lighter rounded rounded-r-none px-3 font-bold text-grey-darker">US$</span>
-                                <input
-                                    type="number" 
+                                {/* <span className="flex items-center bg-grey-lighter rounded rounded-r-none px-3 font-bold text-grey-darker">US$</span> */}
+                                <CurrencyInput
+                                    onChangeValue={(event, originalValue) => handleChange({name: event.target.name, value: originalValue})}
+                                    onBlur={() => validatePrice()}
+                                    currency="USD"
                                     id="price"
                                     name="price" 
-                                    step="0.01"
-                                    min="0"
                                     value={product?.price}
-                                    className={(!isValidPrice ? " border-red-500 border" : '')+ " rounded-md px-3 bg-grey-lighter text-grey-darker py-1.5 font-normal text-grey-darkest border border-grey-lighter font-bold"}
-                                    onChange={(e) => handleChange(e.target)}
+                                    className={(!isValidPrice ?? ("border-red-500 border "))+ " rounded-md px-3 bg-grey-lighter text-grey-darker py-1.5 font-normal text-grey-darkest border border-grey-lighter font-bold"}
                                 />
                                     
                             </div>
@@ -186,8 +206,8 @@ export default function ProductEdit(){
                         </div>
 
                         <div className="col-span-full">
-                        <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-                            Cover product photo
+                        <label htmlFor="cover-photo" title="Required field" className="block text-sm font-medium leading-6 text-gray-900">
+                            Cover product photo <RequiredField />
                         </label>
                         <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                             <div className="text-center">
@@ -245,7 +265,6 @@ export default function ProductEdit(){
                         className={" rounded-md bg-green-600 px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-900"}
                         
                     >
-                        {/* if id inexistente, colocar o texto como create */}
                         { product?._id ? "Update" : "Create"}
                     </button>
                 </div>
