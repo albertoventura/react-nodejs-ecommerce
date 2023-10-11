@@ -88,8 +88,6 @@ export default function ProductEdit(){
                 console.error(`Erro on ${action}`, e);
             }
             
-            console.log(product);
-            
             navigate(`/product/${response._id}`);
         }
     }
