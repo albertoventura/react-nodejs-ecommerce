@@ -29,7 +29,10 @@ export default function Cart(){
             className="w-28"
           />
   
-          <strong>Preço: {item.price}</strong>
+          <strong>Price: {item?.price?.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "USD"
+                        })}</strong>
   
           <div className="flex items-center justify-center gap-3">
             <button
@@ -51,7 +54,7 @@ export default function Cart(){
   
   
           <strong className="float-right">
-            SubTotal: {item.total.toLocaleString("pt-BR", {
+            Subtotal: {item.total.toLocaleString("pt-BR", {
               style: "currency",
               currency: "USD"
             })}
@@ -59,7 +62,7 @@ export default function Cart(){
         </section>
       ))}
 
-      {cart.length !== 0 && <p className="font-bold mt-4">Total: {total}</p> }
+      {cart.length !== 0 && <p className="font-bold mt-4 justify-center flex">Total: {total}</p> }
     </div>
   )
 }

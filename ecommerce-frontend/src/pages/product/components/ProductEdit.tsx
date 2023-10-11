@@ -88,6 +88,7 @@ export default function ProductEdit(){
                 console.error(`Erro on ${action}`, e);
             }
             
+            console.log(product);
             
             navigate(`/product/${response._id}`);
         }
@@ -104,11 +105,12 @@ export default function ProductEdit(){
         
     }
     function handleImageChange(event) {
-        const selectedFile = event.target.files[0];
+        const selectedFile = event.target.files;
+        //const selectedFile = event.target.files[0];
         const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];        
         
-        if (event.target.files && event.target.files[0]) {
-            if(!allowedTypes.includes(selectedFile?.type)){
+        if (selectedFile && selectedFile[0]) {
+            if(!allowedTypes.includes(selectedFile[0]?.type)){
                 const message = "Invalid image format, please choose a valid format!"
                 ToastService.ShowError(message);
                 console.log(message);   
@@ -117,7 +119,7 @@ export default function ProductEdit(){
                 return;
             }else{
                 const reader = new FileReader();
-                reader.readAsDataURL(event.target.files[0]);
+                reader.readAsDataURL(selectedFile[0]);
                 reader.onload = (e) => {
                     setProduct({...product, cover: e.target.result})
                     setIsValidCover(true);
