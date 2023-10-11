@@ -31,14 +31,6 @@ export default function Home(){
   }, [])
 
   function handleAddCartItem(product: ProductProps){
-    console.log("clclclclc", product);
-    /* toast.success("Product added to cart.", {
-      style:{
-        borderRadius: 10,
-        backgroundColor: "#121212",
-        color: "#FFF"
-      }
-    }) */
     ToastService.ShowSuccess("Product added to cart.");
     addItemCart(product);
   }

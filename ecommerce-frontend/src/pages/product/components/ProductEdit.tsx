@@ -238,7 +238,7 @@ export default function ProductEdit(){
                     </div>
                 </div>
 
-                <div className="mt-6 flex items-center justify-center gap-x-6">
+                <div className="mt-6 flex items-center justify-center gap-x-6 mb-20">
                     { product?._id && 
                         (
                             <button 
