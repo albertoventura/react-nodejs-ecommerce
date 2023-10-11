@@ -2,7 +2,6 @@ const product = {
     product: "/product",
     edit: "edit",
     view: ":id"
-
 }
 
 const Paths = {
