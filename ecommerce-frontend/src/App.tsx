@@ -1,13 +1,14 @@
 import ContextProvider from "./core/context/context";
-import { RouterProvider } from "react-router-dom";
-import { router } from "./core/routes/routesss";
 import Routers from "./core/routes/routes";
+import { Toaster } from 'react-hot-toast';
+
 function App() {
-
-
   return (
     <ContextProvider>
-      {/* <RouterProvider router={router} /> */}
+      <Toaster
+        position="bottom-center"
+        reverseOrder={false}
+      />
       <Routers />
     </ContextProvider>
   )

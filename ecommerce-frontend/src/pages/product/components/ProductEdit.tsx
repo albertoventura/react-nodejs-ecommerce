@@ -4,9 +4,9 @@ import formConfig from "../../../core/constants/Config";
 import { IProduct } from "../../../core/interfaces/Product.interface"
 import { FormEvent,  useState } from "react";
 import { ProductService } from "../services/ProductService";
-//import CurrencyInput from 'react-currency-masked-input'
 import { CurrencyInput } from 'react-currency-mask';
 import RequiredField from "../../../shared/components/form/RequiredField";
+import { ToastService } from "../../../shared/services/ToastService";
 
 export default function ProductEdit(){
     const navigate = useNavigate();
@@ -20,17 +20,9 @@ export default function ProductEdit(){
     
 
     function validateForm(){
-        console.log("valid title?", isValidTitle);
-        console.log("valid price?", isValidPrice);
-        console.log("valid cover?", isValidCover);
-        
         return ((isValidTitle && isValidPrice && isValidCover));
     }
     function validateObject(){
-        console.log("!!produc?.title", !!product?.title);
-        console.log("!!produc?.price", !!product?.price);
-        console.log("!!produc?.cover", !!product?.cover);
-        
         return ((!!product?.title && !!product?.price && !!product?.cover));
     }
     function handleChange({name, value}: HTMLInputElement | HTMLTextAreaElement){
@@ -40,11 +32,8 @@ export default function ProductEdit(){
 
     function validateTitle(){
         const title = product?.title || "";
-        console.log('$$$$$$', title);
         
         if(title.length <= formConfig.titleMinLength) {
-            console.log('$@@@@@$$$$$', title);
-            
             setIsValidTitle(false);
             return;
         }
@@ -77,28 +66,38 @@ export default function ProductEdit(){
 
     async function handleSubmit(e: FormEvent){
         e.preventDefault();
-        console.log('product', product);  
+    
         validateTitle();
         validatePrice();
         validateCover();
 
         if(validateForm() && validateObject()){
-            let response: IProduct | ApiException;
-            if(product._id){
-                response = await ProductService.update(product);
-            }else{
-                response = await ProductService.create(product);
+            let response: IProduct | ApiException;  
+            const action: string = product._id ? "update" : "create";          
+            try {
+                if(product._id){
+                    response = await ProductService.update(product);
+                }else{
+                    response = await ProductService.create(product);
+                }
+                ToastService.ShowSuccess(`Product successfully ${action}d.`);                 
+            } catch (error) {
+                ToastService.ShowError(`Erro on ${action}`)
+                console.error(`Erro on ${action}`, e);
             }
+            
+            
             navigate(`/product/${response._id}`);
         }
     }
     async function handleDelete(id: string){
-        console.log(id);
-        
         await ProductService.del(id).then(()=>{
+            ToastService.ShowSuccess("Product successfully deleted.");
             navigate('/');
         }).catch(e => {
-            console.log("error on delete", e);            
+            ToastService.ShowError("Error on delete")
+            console.error("Error on delete", e);
+                     
         });
         
     }
@@ -109,7 +108,9 @@ export default function ProductEdit(){
         
         if (event.target.files && event.target.files[0]) {
             if(!allowedTypes.includes(selectedFile?.type)){
-                console.log("imagem tipo errado");   
+                const message = "Invalid image format, please choose a valid format!"
+                ToastService.ShowError(message);
+                console.log(message);   
                 setProduct({...product, cover: ""});
                 setIsValidCover(false);
                 return;
@@ -121,6 +122,7 @@ export default function ProductEdit(){
                     setIsValidCover(true);
                 };
                 reader.onerror = (error) => {
+                    ToastService.ShowError("Read image error");
                     console.log("read image error:", error);
                     
                 }

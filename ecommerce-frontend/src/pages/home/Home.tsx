@@ -7,6 +7,8 @@ import { ProductService } from '../product/services/ProductService';
 import { IProduct } from '../../core/interfaces/Product.interface';
 import { ApiException } from '../../core/services/ApiException';
 import ProductCard from './components/ProductCard';
+import toast from 'react-hot-toast';
+import { ToastService } from "../../shared/services/ToastService"
 export interface ProductProps{
   _id: number;
   title: string;
@@ -30,7 +32,14 @@ export default function Home(){
 
   function handleAddCartItem(product: ProductProps){
     console.log("clclclclc", product);
-    
+    /* toast.success("Product added to cart.", {
+      style:{
+        borderRadius: 10,
+        backgroundColor: "#121212",
+        color: "#FFF"
+      }
+    }) */
+    ToastService.ShowSuccess("Product added to cart.");
     addItemCart(product);
   }
 
