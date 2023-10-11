@@ -22,7 +22,7 @@ export default function Cart(){
       )}
 
       {cart.map( (item) => (
-        <section key={item.id} className="flex items-center justify-between border-b-2 border-gray-300">
+        <section key={item._id} className="flex items-center justify-between border-b-2 border-gray-300">
           <img
             src={item.cover}
             alt={item.title} 
@@ -53,7 +53,7 @@ export default function Cart(){
           <strong className="float-right">
             SubTotal: {item.total.toLocaleString("pt-BR", {
               style: "currency",
-              currency: "BRL"
+              currency: "USD"
             })}
           </strong>  
         </section>

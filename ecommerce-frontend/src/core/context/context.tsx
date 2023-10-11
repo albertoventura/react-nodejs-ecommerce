@@ -10,7 +10,7 @@ interface CartContextData {
 }
 
 interface CartProps{
-  id: number;
+  _id: number;
   title: string;
   description: string;
   price: number;
@@ -30,7 +30,7 @@ function ContextProvider({ children }: CartProviderProps){
   const [total, setTotal] = useState("");
 
   function addItemCart(newItem: ProductProps){
-    const indexItem = cart.findIndex(item => item.id === newItem._id)
+    const indexItem = cart.findIndex(item => item._id === newItem._id)
 
     if(indexItem !== -1){
       const cartList = cart;
@@ -58,7 +58,7 @@ function ContextProvider({ children }: CartProviderProps){
 
 
   function removeItemCart(product: CartProps){
-    const indexItem = cart.findIndex(item => item.id === product.id)
+    const indexItem = cart.findIndex(item => item._id === product._id)
 
     if(cart[indexItem]?.amount > 1){
     const cartList = cart;
@@ -71,7 +71,7 @@ function ContextProvider({ children }: CartProviderProps){
     return;
     }
 
-    const removeItem = cart.filter(item => item.id !== product.id)
+    const removeItem = cart.filter(item => item._id !== product._id)
     setCart(removeItem);
     totalResultCart(removeItem)
 
