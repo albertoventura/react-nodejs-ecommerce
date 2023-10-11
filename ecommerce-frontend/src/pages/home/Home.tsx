@@ -1,21 +1,13 @@
 import { useEffect, useState, useContext } from 'react'
 import { BsPlusCircle } from 'react-icons/bs'
 import { Context } from "../../core/context/context";
-//import toast from 'react-hot-toast'
+
 import { Link } from 'react-router-dom'
 import { ProductService } from '../product/services/ProductService';
 import { IProduct } from '../../core/interfaces/Product.interface';
 import { ApiException } from '../../core/services/ApiException';
 import ProductCard from './components/ProductCard';
-import toast from 'react-hot-toast';
 import { ToastService } from "../../shared/services/ToastService"
-export interface ProductProps{
-  _id: number;
-  title: string;
-  description: string;
-  price: number;
-  cover: string;
-}
 
 export default function Home(){
   const { addItemCart } = useContext(Context)
@@ -30,7 +22,7 @@ export default function Home(){
     getProducts();
   }, [])
 
-  function handleAddCartItem(product: ProductProps){
+  function handleAddCartItem(product: IProduct){
     ToastService.ShowSuccess("Product added to cart.");
     addItemCart(product);
   }

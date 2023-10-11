@@ -7,16 +7,16 @@ export default function Cart(){
 
   return(
     <div className="w-full max-w-7xl mx-auto">
-      <h1 className="font-medium text-2xl text-center my-4">Meu carrinho</h1>
+      <h1 className="font-medium text-2xl text-center my-4">My cart:</h1>
 
       {cart.length === 0 && (
         <div className="flex flex-col items-center justify-center">
-          <p className="font-medium">Ops seu carrinho está vazio...</p>
+          <p className="font-medium">Oops your cart is empty...</p>
           <Link 
             to="/"
             className="bg-slate-600 my-3 p-1 px-3 text-white font-medium rounded"
           >
-            Acessar produtos
+            Go shop!
           </Link>
         </div>
       )}

@@ -105,8 +105,7 @@ export default function ProductEdit(){
     }
     function handleImageChange(event) {
         const selectedFile = event.target.files[0];
-        const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
-        console.log(selectedFile);
+        const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];        
         
         if (event.target.files && event.target.files[0]) {
             if(!allowedTypes.includes(selectedFile?.type)){
@@ -155,8 +154,7 @@ export default function ProductEdit(){
                                             value={product?.title}
                                             className={(!isValidTitle ?? ("border-red-500 border "))+"pl-3 block flex-1 rounded-md bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"}
                                             placeholder="Dell Notebook Inspiron 15r"
-                                            onChange={(e) => handleChange(e.target)}
-                                            onBlur={() => validateTitle()}
+                                            onChange={(e) => handleChange(e.target)}                                            
                                         />
                                     </div>
                                     { !isValidTitle ? <ErroInputMessage message={`Invalid title field! Min number of ${formConfig.titleMinLength} to able.`}/> : <></> }
@@ -186,8 +184,7 @@ export default function ProductEdit(){
                                 </label>
                                 <div className="mt-2 flex flex-row">
                                     <CurrencyInput
-                                        onChangeValue={(event, originalValue) => handleChange({name: event.target.name, value: originalValue})}
-                                        onBlur={() => validatePrice()}
+                                        onChangeValue={(event, originalValue) => handleChange({name: event.target.name, value: originalValue})}                                        
                                         currency="USD"
                                         id="price"
                                         name="price" 
