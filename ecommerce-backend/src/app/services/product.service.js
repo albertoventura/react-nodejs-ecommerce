@@ -1,6 +1,3 @@
-const fs = require("fs");
-//const md5 = require("md5");
-//const User = require("../models/user.model");
 const Product = require("../models/product.model");
 
 const productService = {
@@ -70,18 +67,13 @@ const productService = {
         try {
             return await Product.findById({_id: data.id})
                 .then( product => {
+
                     old = product;
                     product.title = data.title ?? old.title;
                     product.description = data.description ?? old.description;
                     product.price = data.price ?? old.price;
                     product.cover = data.cover ?? old.cover;
-                    
-                    /* if(data.img){
-                        if(old.img){
-                            fs.unlinkSync(old.img);
-                        }
-                        product.img = data.img
-                    } */
+
                     return product.save()
                         .then(doc => {
                             return { 
@@ -105,9 +97,6 @@ const productService = {
         try {
             return await Product.findByIdAndDelete({_id: id})
                 .then(data => {
-                    /* if(data.img){
-                        fs.unlinkSync(data.img);
-                    } */
                     return { 
                         status: 200,
                         message: "Product successfully deleted",

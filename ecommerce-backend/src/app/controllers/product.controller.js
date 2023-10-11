@@ -30,12 +30,7 @@ const productController = {
         
         try {
             const { title, description, price, cover } = req.body;
-            /* let img;
 
-            if(req.file){
-                img = req.file.path
-            }
-             */
             await productService.create({title, description, price, cover})
                 .then( data => {
                     return res.status(data.status).json(data);
@@ -51,10 +46,7 @@ const productController = {
         try {
             const { id } = req.params;
             const { title, description, price, cover } = req.body;
-            /* let img;
-            if(req.file){
-                img = req.file.path
-            } */
+
             // exemplo de uso sem then catch
             const response = await productService.update({id, title, description, price, cover});
             

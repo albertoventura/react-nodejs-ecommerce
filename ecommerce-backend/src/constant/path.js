@@ -11,8 +11,6 @@ const product = {
     ...crud
 }
 
-
-
 module.exports = {
     product,
 }
