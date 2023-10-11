@@ -2,7 +2,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import formConfig from "../../../core/constants/Config";
 import { IProduct } from "../../../core/interfaces/Product.interface"
-import { FormEvent,  useState, useRef, useMemo, useCallback} from "react";
+import { FormEvent,  useState } from "react";
 import { ProductService } from "../services/ProductService";
 //import CurrencyInput from 'react-currency-masked-input'
 import { CurrencyInput } from 'react-currency-mask';

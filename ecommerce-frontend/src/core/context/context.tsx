@@ -30,7 +30,7 @@ function ContextProvider({ children }: CartProviderProps){
   const [total, setTotal] = useState("");
 
   function addItemCart(newItem: ProductProps){
-    const indexItem = cart.findIndex(item => item.id === newItem.id)
+    const indexItem = cart.findIndex(item => item.id === newItem._id)
 
     if(indexItem !== -1){
       const cartList = cart;
@@ -81,7 +81,7 @@ function ContextProvider({ children }: CartProviderProps){
   function totalResultCart(items: CartProps[]){
     const myCart = items;
     const result = myCart.reduce((acc, obj) => { return acc + obj.total}, 0)
-    const resultFormated = result.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
+    const resultFormated = result.toLocaleString("pt-BR", { style: "currency", currency: "USD" })
     setTotal(resultFormated);
   }
 

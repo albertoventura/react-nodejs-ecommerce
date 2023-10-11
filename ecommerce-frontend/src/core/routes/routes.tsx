@@ -2,8 +2,8 @@
 import { BrowserRouter } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import Home from "../../pages/home/Home";
-import ProductView from "../../pages/product/view/ProductView";
-import ProductEdit from "../../pages/product/edit/ProductEdit";
+import ProductView from "../../pages/product/components/ProductView";
+import ProductEdit from "../../pages/product/components/ProductEdit";
 import Cart from "../../pages/cart/Cart";
 import Product from "../../pages/product/Product";
 import Header from "../components/header/Header";

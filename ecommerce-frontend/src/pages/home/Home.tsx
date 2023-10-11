@@ -8,7 +8,7 @@ import { IProduct } from '../../core/interfaces/Product.interface';
 import { ApiException } from '../../core/services/ApiException';
 import ProductCard from './components/ProductCard';
 export interface ProductProps{
-  id: number;
+  _id: number;
   title: string;
   description: string;
   price: number;
@@ -29,6 +29,8 @@ export default function Home(){
   }, [])
 
   function handleAddCartItem(product: ProductProps){
+    console.log("clclclclc", product);
+    
     addItemCart(product);
   }
 
@@ -47,7 +49,7 @@ export default function Home(){
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5">
           {products.map( (product) => (            
-              <ProductCard product={product} click={() => handleAddCartItem}/>
+              <ProductCard product={product} click={handleAddCartItem}/>
           ))}
 
         </div>
