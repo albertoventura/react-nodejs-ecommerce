@@ -60,14 +60,14 @@ function ContextProvider({ children }: CartProviderProps){
     const indexItem = cart.findIndex(item => item._id === product._id)
 
     if(cart[indexItem]?.amount > 1){
-    const cartList = cart;
+      const cartList = cart;
 
-    cartList[indexItem].amount = cartList[indexItem].amount -1;
-    cartList[indexItem].total = cartList[indexItem].total - cartList[indexItem].price;
-    
-    setCart(cartList);
-    totalResultCart(cartList)
-    return;
+      cartList[indexItem].amount = cartList[indexItem].amount -1;
+      cartList[indexItem].total = cartList[indexItem].total - cartList[indexItem].price;
+      
+      setCart(cartList);
+      totalResultCart(cartList)
+      return;
     }
 
     const removeItem = cart.filter(item => item._id !== product._id)
