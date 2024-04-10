@@ -26,7 +26,7 @@ export default function Cart(){
           <img
             src={item.cover}
             alt={item.title} 
-            className="w-28"
+            className="w-28 m-1"
           />
   
           <strong>Price: {item?.price?.toLocaleString("pt-BR", {

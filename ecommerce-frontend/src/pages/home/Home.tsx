@@ -32,7 +32,7 @@ export default function Home(){
     <div>
       <main className="w-full max-w-7xl px-4 mx-auto">
         <div className="flex flex-row justify-center mt-10">
-          <h1 className="font-bold text-2xl mb-4  text-center">Produtos</h1>
+          <h1 className="font-bold text-2xl mb-4  text-center">Products</h1>
           <Link to={"/product/edit"}>
             <button className="bg-purple-600 p-1 mt-1 rounded-full h-7 ml-3" >
               <BsPlusCircle size={20} color="#FFF"/>
